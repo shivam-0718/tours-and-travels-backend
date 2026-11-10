@@ -8,12 +8,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "location")
-@Data
+@Table(name = "locations")
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
