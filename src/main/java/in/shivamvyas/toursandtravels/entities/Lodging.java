@@ -6,6 +6,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import in.shivamvyas.toursandtravels.enums.LodgingType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,8 +31,9 @@ public class Lodging {
     @Column(name = "lodging_name")
     private String lodgingName;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "lodging_type")
-    private String lodgingType;
+    private LodgingType lodgingType;
 
     @Column(name = "lodging_description")
     private String lodgingDescription;
