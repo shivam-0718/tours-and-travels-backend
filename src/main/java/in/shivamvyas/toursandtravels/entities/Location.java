@@ -34,7 +34,7 @@ public class Location {
     @Column(name = "country")
     private String country;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 512)
     private String description;
 
     @Column(name = "estimated_travel_time")
