@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -52,47 +51,43 @@ public class LocationServiceImpl implements LocationService {
     @Transactional
     public LocationResponse updateLocation(Long id, LocationRequest request) {
         log.info("Updating location with id: {}", id);
-        Optional<Location> optional = locationRepo.findById(id);
-        if(optional.isPresent()) {
-            Location location = optional.get();
+        Location location = findOrThrow(id);
 
-            location.setFromLocation(request.getFromLocation());
-            location.setToLocation(request.getToLocation());
-            location.setCountry(request.getCountry());
-            location.setDescription(request.getDescription());
-            location.setEstimatedTravelTime(request.getEstimatedTravelTime());
+        location.setFromLocation(request.getFromLocation());
+        location.setToLocation(request.getToLocation());
+        location.setCountry(request.getCountry());
+        location.setDescription(request.getDescription());
+        location.setEstimatedTravelTime(request.getEstimatedTravelTime());
 
-            locationRepo.save(location);
-            log.info("Location with id number {} updated successfully", id);
-            return entityToResponse(location);
-        }
-        throw new ResourceNotFoundException("Location with given id is not available. Try again with correct id.");
+        locationRepo.save(location);
+        log.info("Location with id number {} updated successfully", id);
+        return entityToResponse(location);
     }
 
     @Override
     @Transactional
     public String deleteLocation(Long id) {
         log.info("Deleting location with id: {}", id);
-        Optional<Location> optional = locationRepo.findById(id);
-        if(optional.isPresent()) {
-            locationRepo.delete(optional.get());
-            log.info("Location with id number {} has been deleted successfully", id);
-            return "The location with id " + id + " has been deleted successfully.";
-        }
-
-        throw new ResourceNotFoundException("Location with given id is not available. Try again with correct id.");
+        Location location = findOrThrow(id);
+        locationRepo.delete(location);
+        log.info("Location with id number {} has been deleted successfully", id);
+        return "The location with id " + id + " has been deleted successfully.";
     }
 
     @Override
     public LocationResponse getLocationById(Long id) {
         log.info("Fetching location with id: {}", id);
-        Optional<Location> optional = locationRepo.findById(id);
-        if(optional.isPresent()) {
-            Location fetchedLocation = optional.get();
-            log.info("Location with id {} has been fetched successfully.", id);
-            return entityToResponse(fetchedLocation);
-        }
-        throw new ResourceNotFoundException("Location with given id is not available. Try again with correct id.");
+        Location fetchedLocation = findOrThrow(id);
+        log.info("Location with id {} has been fetched successfully.", id);
+        return entityToResponse(fetchedLocation);
+    }
+
+    /**
+     * Private helper: load a Location or throw ResourceNotFoundException (404) naming the id.
+     */
+    private Location findOrThrow(Long id) {
+        return locationRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Location not found with id " + id));
     }
 
     /**
