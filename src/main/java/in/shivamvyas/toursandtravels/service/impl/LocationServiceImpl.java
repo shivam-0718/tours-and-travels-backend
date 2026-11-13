@@ -7,33 +7,36 @@ import in.shivamvyas.toursandtravels.exception.ResourceNotFoundException;
 import in.shivamvyas.toursandtravels.repo.LocationRepo;
 import in.shivamvyas.toursandtravels.service.LocationService;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 @Service
+@Slf4j
 public class LocationServiceImpl implements LocationService {
-    private static final Logger logger = Logger.getLogger(LocationServiceImpl.class.getName());
+    private final LocationRepo locationRepo;
 
     @Autowired
-    private LocationRepo locationRepo;
+    public LocationServiceImpl(LocationRepo locationRepo) {
+        this.locationRepo = locationRepo;
+    }
 
     @Override
     @Transactional
     public LocationResponse registerLocation(LocationRequest request) {
         Location location = requestToEntity(request);
-        logger.info("Adding a new location....in progress......");
+        log.info("Adding a new location....in progress......");
         Location savedLocation = locationRepo.save(location);
-        logger.info("Location added successfully with id: " + savedLocation.getId());
+        log.info("Location added successfully with id: {}", savedLocation.getId());
         return entityToResponse(savedLocation);
     }
 
     @Override
     public List<LocationResponse> fetchLocations() {
-        logger.info("Fetching all locations");
+        log.info("Fetching all locations...");
         List<Location> locationsList = locationRepo.findAll();
         List<LocationResponse> locationResponseList = new ArrayList<>();
 
@@ -41,14 +44,14 @@ public class LocationServiceImpl implements LocationService {
             locationResponseList.add(entityToResponse(location));
         }
 
-        logger.info("All locations fetched successfully");
+        log.info("All locations fetched successfully...");
         return locationResponseList;
     }
 
     @Override
     @Transactional
     public LocationResponse updateLocation(Long id, LocationRequest request) {
-        logger.info("Updating location with ID: " + id);
+        log.info("Updating location with id: {}", id);
         Optional<Location> optional = locationRepo.findById(id);
         if(optional.isPresent()) {
             Location location = optional.get();
@@ -60,7 +63,7 @@ public class LocationServiceImpl implements LocationService {
             location.setEstimatedTravelTime(request.getEstimatedTravelTime());
 
             locationRepo.save(location);
-            logger.info("Location updated successfully");
+            log.info("Location with id number {} updated successfully", id);
             return entityToResponse(location);
         }
         throw new ResourceNotFoundException("Location with given id is not available. Try again with correct id.");
@@ -69,11 +72,11 @@ public class LocationServiceImpl implements LocationService {
     @Override
     @Transactional
     public String deleteLocation(Long id) {
-        logger.info("Deleting location with ID: " + id);
+        log.info("Deleting location with id: {}", id);
         Optional<Location> optional = locationRepo.findById(id);
         if(optional.isPresent()) {
             locationRepo.delete(optional.get());
-            logger.info("Location with ID " + id +  " has been deleted successfully");
+            log.info("Location with id number {} has been deleted successfully", id);
             return "The location with id " + id + " has been deleted successfully.";
         }
 
@@ -82,10 +85,11 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public LocationResponse getLocationById(Long id) {
-        logger.info("Fetching location with ID: " + id);
+        log.info("Fetching location with id: {}", id);
         Optional<Location> optional = locationRepo.findById(id);
         if(optional.isPresent()) {
             Location fetchedLocation = optional.get();
+            log.info("Location with id {} has been fetched successfully.", id);
             return entityToResponse(fetchedLocation);
         }
         throw new ResourceNotFoundException("Location with given id is not available. Try again with correct id.");
