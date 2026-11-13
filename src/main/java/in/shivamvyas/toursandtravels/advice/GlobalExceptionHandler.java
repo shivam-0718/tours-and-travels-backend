@@ -5,10 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Central place that turns exceptions thrown from any controller into a JSON
@@ -57,9 +60,19 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Thrown when a single @Valid @RequestBody object fails bean validation (e.g. LocationRequest).
+     * Returns 400 with a field name -> validation message map.
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleMethodArgumentValidationException(MethodArgumentNotValidException mave) {
+        Map<String, String> errors = new HashMap<>();
+        mave.getBindingResult().getFieldErrors().forEach(err -> errors.put(err.getField(), err.getDefaultMessage()));
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
      * 500: fallback for any exception no other handler matches.
-     * The full stack trace is logged on the server (exception passed as the last
-     * argument to log.error); the client should only see a safe message.
+     * The full stack trace is logged on the server; the client should only see a safe message.
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetails> handleException(Exception ex, WebRequest request) {
