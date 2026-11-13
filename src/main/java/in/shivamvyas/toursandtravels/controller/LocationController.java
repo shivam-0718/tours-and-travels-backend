@@ -20,7 +20,7 @@ public class LocationController {
         this.locationService = locationService;
     }
 
-    @PostMapping("/register")
+    @PostMapping
     public ResponseEntity<LocationResponse> addLocation(@RequestBody @Valid LocationRequest request) {
         LocationResponse response = locationService.registerLocation(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
