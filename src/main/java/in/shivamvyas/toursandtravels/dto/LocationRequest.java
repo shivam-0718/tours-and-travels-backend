@@ -12,22 +12,22 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LocationRequest {
-    @Size(min = 5, max = 30)
-    @NotBlank(message = "Source Location should be between 5 characters and 30 characters")
+    @Size(min = 3, max = 50, message = "Source Location should be between 3 characters and 50 characters.")
+    @NotBlank(message = "Source location name cannot be empty.")
     private String fromLocation;
 
-    @Size(min = 5, max = 30)
-    @NotBlank(message = "Destination Location should be between 5 characters and 30 characters")
+    @Size(min = 3, max = 50, message = "Destination Location should be between 3 characters and 50 characters.")
+    @NotBlank(message = "Destination location name cannot be empty.")
     private String toLocation;
 
-    @Size(min = 5, max = 30)
-    @NotBlank(message = "Country name should be between 5 characters and 50 characters")
+    @Size(min = 3, max = 50, message = "Country name should be between 3 characters and 50 characters.")
+    @NotBlank(message = "Country name cannot be empty. ")
     private String country;
 
-    @Size(min = 1, max = 500)
-    @NotBlank(message = "Description should be between 5 characters and 50 characters")
+    @Size(min = 1, max = 500, message = "Description should be between 1 character and 500 characters")
+    @NotBlank(message = "Description cannot be empty. ")
     private String description;
 
-    @NotBlank(message = "The estimated travel time cannot be zero")
+    @NotBlank(message = "Estimated travel time cannot be empty. Add the estimated travel time.")
     private String estimatedTravelTime;
 }
