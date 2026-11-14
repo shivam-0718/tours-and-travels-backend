@@ -1,15 +1,15 @@
 package in.shivamvyas.toursandtravels.service.impl;
 
-import in.shivamvyas.toursandtravels.dto.LocationRequest;
-import in.shivamvyas.toursandtravels.dto.LocationResponse;
+import in.shivamvyas.toursandtravels.dto.location.LocationRequest;
+import in.shivamvyas.toursandtravels.dto.location.LocationResponse;
 import in.shivamvyas.toursandtravels.entities.Location;
 import in.shivamvyas.toursandtravels.exception.ResourceNotFoundException;
 import in.shivamvyas.toursandtravels.repo.LocationRepo;
 import in.shivamvyas.toursandtravels.service.LocationService;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 

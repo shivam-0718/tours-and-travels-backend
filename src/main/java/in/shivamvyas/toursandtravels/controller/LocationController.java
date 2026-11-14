@@ -1,7 +1,7 @@
 package in.shivamvyas.toursandtravels.controller;
 
-import in.shivamvyas.toursandtravels.dto.LocationRequest;
-import in.shivamvyas.toursandtravels.dto.LocationResponse;
+import in.shivamvyas.toursandtravels.dto.location.LocationRequest;
+import in.shivamvyas.toursandtravels.dto.location.LocationResponse;
 import in.shivamvyas.toursandtravels.service.LocationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

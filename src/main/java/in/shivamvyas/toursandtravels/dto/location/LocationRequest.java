@@ -1,4 +1,4 @@
-package in.shivamvyas.toursandtravels.dto;
+package in.shivamvyas.toursandtravels.dto.location;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

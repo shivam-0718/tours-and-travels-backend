@@ -1,7 +1,7 @@
 package in.shivamvyas.toursandtravels.service;
 
-import in.shivamvyas.toursandtravels.dto.LocationRequest;
-import in.shivamvyas.toursandtravels.dto.LocationResponse;
+import in.shivamvyas.toursandtravels.dto.location.LocationRequest;
+import in.shivamvyas.toursandtravels.dto.location.LocationResponse;
 import java.util.List;
 
 public interface LocationService {

@@ -1,4 +1,4 @@
-package in.shivamvyas.toursandtravels.dto;
+package in.shivamvyas.toursandtravels.dto.location;
 
 import lombok.Builder;
 import lombok.Getter;
