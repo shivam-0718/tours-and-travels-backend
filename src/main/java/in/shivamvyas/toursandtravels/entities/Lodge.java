@@ -22,24 +22,24 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Lodging {
+public class Lodge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "lodging_name")
-    private String lodgingName;
+    @Column(name = "lodge_name")
+    private String lodgeName;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "lodging_type")
     private LodgingType lodgingType;
 
-    @Column(name = "lodging_description")
-    private String lodgingDescription;
+    @Column(name = "lodge_description", length = 512)
+    private String lodgeDescription;
 
-    @Column(name = "lodging_address")
-    private String lodgingAddress;
+    @Column(name = "lodge_address")
+    private String lodgeAddress;
 
     @Column(name = "rating")
     private Double rating;
