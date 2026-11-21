@@ -28,6 +28,7 @@ public class LocationRequest {
     @NotBlank(message = "Description cannot be empty. ")
     private String description;
 
+    @Size(max = 20, message = "Estimated travel time can be up to 20 characters.")
     @NotBlank(message = "Estimated travel time cannot be empty. Add the estimated travel time.")
     private String estimatedTravelTime;
 }
