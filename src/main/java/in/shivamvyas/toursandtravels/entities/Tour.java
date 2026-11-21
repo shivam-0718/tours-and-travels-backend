@@ -1,10 +1,15 @@
 package in.shivamvyas.toursandtravels.entities;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +18,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tours")
@@ -47,4 +54,34 @@ public class Tour {
 
     @Column(name = "tickets_available")
     private Integer ticketsAvailable;
+
+    @ElementCollection
+    @CollectionTable(name = "tour_meals", joinColumns = @JoinColumn(name = "tour_id"))
+    @Column(name = "meal")
+    @Builder.Default
+    private List<String> meals = new ArrayList<>();
+
+    @ElementCollection
+    @CollectionTable(name = "tour_activities", joinColumns = @JoinColumn(name = "tour_id"))
+    @Column(name = "activity")
+    @Builder.Default
+    private List<String> activities = new ArrayList<>();
+
+    @ElementCollection
+    @CollectionTable(name = "tour_images", joinColumns = @JoinColumn(name = "tour_id"))
+    @Column(name = "image")
+    @Builder.Default
+    private List<String> tourImages = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id")
+    private Location location;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lodge_id")
+    private Lodge lodge;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "transport_id")
+    private Transport transport;
 }
