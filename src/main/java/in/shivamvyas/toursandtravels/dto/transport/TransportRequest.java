@@ -25,7 +25,7 @@ public class TransportRequest {
     @NotBlank(message = "Estimated Travel time cannot be empty.")
     private String estimatedTravelTime;
 
-    @Size(min = 3, max = 255, message = "Transport description should be between 3 characters and 255 characters.")
+    @Size(min = 3, max = 500, message = "Transport description should be between 3 characters and 500 characters.")
     @NotBlank(message = "Transport description cannot be empty.")
     private String transportDescription;
 }

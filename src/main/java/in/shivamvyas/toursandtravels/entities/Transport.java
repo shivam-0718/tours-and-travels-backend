@@ -38,6 +38,6 @@ public class Transport {
     @Column(name = "estimated_travel_time")
     private String estimatedTravelTime;
 
-    @Column(name = "transport_description")
+    @Column(name = "transport_description", length = 512)
     private String transportDescription;
 }
