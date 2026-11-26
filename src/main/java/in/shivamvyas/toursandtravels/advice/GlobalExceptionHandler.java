@@ -1,5 +1,6 @@
 package in.shivamvyas.toursandtravels.advice;
 
+import in.shivamvyas.toursandtravels.exception.DuplicateResourceException;
 import in.shivamvyas.toursandtravels.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -39,6 +40,21 @@ public class GlobalExceptionHandler {
                 .build();
         log.debug("Entity not found: {} ", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * 409: the resource already exists (e.g. an email that is already registered).
+     * Thrown by the service layer as {@link DuplicateResourceException}.
+     */
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<ErrorDetails> handleDuplicate(DuplicateResourceException ex, WebRequest request) {
+        ErrorDetails body = ErrorDetails.builder()
+                .timeStamp(LocalDateTime.now())
+                .message(ex.getMessage())
+                .details(request.getDescription(false))
+                .build();
+        log.debug("Duplicate resource: {}", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
 
     /**
