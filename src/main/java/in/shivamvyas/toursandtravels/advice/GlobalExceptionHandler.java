@@ -1,6 +1,9 @@
 package in.shivamvyas.toursandtravels.advice;
 
 import in.shivamvyas.toursandtravels.exception.DuplicateResourceException;
+import in.shivamvyas.toursandtravels.exception.InsufficientTicketsException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import in.shivamvyas.toursandtravels.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -54,6 +57,50 @@ public class GlobalExceptionHandler {
                 .details(request.getDescription(false))
                 .build();
         log.debug("Duplicate resource: {}", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+    }
+
+    /**
+     * 401: wrong email or password (thrown by AuthenticationManager during login).
+     * One fixed message for every case, so a caller cannot tell which emails exist.
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorDetails> handleAuthentication(AuthenticationException ex, WebRequest request) {
+        ErrorDetails body = ErrorDetails.builder()
+                .timeStamp(LocalDateTime.now())
+                .message("Invalid email or password.")
+                .details(request.getDescription(false))
+                .build();
+        log.debug("Authentication failed: {}", ex.getClass().getSimpleName());
+        return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
+    }
+
+    /**
+     * 403: logged in, but the role is not allowed (thrown by @PreAuthorize inside the controller call).
+     * Without this handler the catch-all below would turn it into a 500.
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorDetails> handleAccessDenied(AccessDeniedException ex, WebRequest request) {
+        ErrorDetails body = ErrorDetails.builder()
+                .timeStamp(LocalDateTime.now())
+                .message("You do not have permission to do this.")
+                .details(request.getDescription(false))
+                .build();
+        log.debug("Access denied: {}", request.getDescription(false));
+        return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
+    }
+
+    /**
+     * 409: not enough tickets left for the requested quantity.
+     */
+    @ExceptionHandler(InsufficientTicketsException.class)
+    public ResponseEntity<ErrorDetails> handleInsufficientTickets(InsufficientTicketsException ex, WebRequest request) {
+        ErrorDetails body = ErrorDetails.builder()
+                .timeStamp(LocalDateTime.now())
+                .message(ex.getMessage())
+                .details(request.getDescription(false))
+                .build();
+        log.debug("Insufficient tickets: {}", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
 
