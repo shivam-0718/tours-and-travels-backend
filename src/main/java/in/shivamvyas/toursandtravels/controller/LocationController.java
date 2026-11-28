@@ -1,5 +1,6 @@
 package in.shivamvyas.toursandtravels.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import in.shivamvyas.toursandtravels.dto.location.LocationRequest;
 import in.shivamvyas.toursandtravels.dto.location.LocationResponse;
 import in.shivamvyas.toursandtravels.service.LocationService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/admin/locations")
 public class LocationController {
     private final LocationService locationService;

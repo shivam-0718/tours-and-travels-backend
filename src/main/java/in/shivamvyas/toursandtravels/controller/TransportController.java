@@ -1,5 +1,6 @@
 package in.shivamvyas.toursandtravels.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import in.shivamvyas.toursandtravels.dto.transport.TransportRequest;
 import in.shivamvyas.toursandtravels.dto.transport.TransportResponse;
 import in.shivamvyas.toursandtravels.service.TransportService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/admin/transports")
 public class TransportController {
     private final TransportService transportService;

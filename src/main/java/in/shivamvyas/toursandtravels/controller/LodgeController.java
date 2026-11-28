@@ -1,5 +1,6 @@
 package in.shivamvyas.toursandtravels.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import in.shivamvyas.toursandtravels.dto.lodge.LodgeRequest;
 import in.shivamvyas.toursandtravels.dto.lodge.LodgeResponse;
 import in.shivamvyas.toursandtravels.service.LodgeService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/admin/lodges")
 public class LodgeController {
     private final LodgeService lodgeService;
